@@ -4,6 +4,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 import scala.collection.mutable.ArrayBuffer
+import scala.jdk.CollectionConverters._
 import scala.util.Random
 
 class MaxHeapSpec extends AnyFlatSpec with Matchers {
@@ -26,14 +27,27 @@ class MaxHeapSpec extends AnyFlatSpec with Matchers {
 
   "The MaxHeap class" should "return the greatest elements randomly generated" in {
     val maxHeap = new MaxHeap()
+    generateRandomList(1000) foreach { maxHeap.add }
+    validate(maxHeap)
+  }
+
+  "The MaxHeap class" should "bulk insert randomly generated list of values" in {
+    val xs = generateRandomList(1000)
+    val maxHeap = MaxHeap.addAll(xs.asJava.asInstanceOf[java.util.List[java.lang.Integer]])
+    validate(maxHeap)
+  }
+
+  private def generateRandomList(n: Int): List[Int] = {
     val buffer = new ArrayBuffer[Int]()
-    for (i <- 0 until 1000) {
+    for (_ <- 0 until n) {
       val r = Random.nextInt
-      maxHeap.add(r)
       buffer.append(r)
     }
-    val values: List[Int] = buffer.toList.sorted.reverse
-    values foreach { i: Int =>
+    buffer.toList
+  }
+
+  private def validate(maxHeap: MaxHeap): Unit = {
+    maxHeap.array().sorted.reverse.foreach { i: Int =>
       maxHeap.remove() shouldEqual i
     }
   }

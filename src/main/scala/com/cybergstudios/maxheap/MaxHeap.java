@@ -3,6 +3,7 @@ package com.cybergstudios.maxheap;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Mutable MaxHeap. Not thread-safe. */
 public class MaxHeap {
 
   private List<Integer> a = new ArrayList<>();
@@ -17,6 +18,19 @@ public class MaxHeap {
     }
   }
 
+  /** O(n) bulk insertion. */
+  public static MaxHeap addAll(List<Integer> xs) {
+    MaxHeap h = new MaxHeap();
+    if (xs == null) return h;
+    h.a = new ArrayList<>(xs);
+    if (xs.size() == 1) return h;
+    int log2 = (int) Util.log2(xs.size());
+    int i = ((1 << log2) - 1);
+    while (i > 0) h.heapify(--i);
+    return h;
+  }
+
+  /** Remove the greatest value from the heap. */
   public int remove() {
     if (a.size() == 0) throw new IllegalStateException("MaxHeap is empty");
     if (a.size() == 1) return a.remove(0);
@@ -26,6 +40,7 @@ public class MaxHeap {
     return pop;
   }
 
+  /** Returns a copy of the max-heap array representation. */
   public int[] array() {
     int[] r = new int[a.size()];
     int idx = 0;
