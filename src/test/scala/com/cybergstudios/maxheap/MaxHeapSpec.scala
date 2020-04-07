@@ -37,6 +37,14 @@ class MaxHeapSpec extends AnyFlatSpec with Matchers {
     validate(maxHeap)
   }
 
+  "The MaxHeap class" should "sort its content" in {
+    val xs = generateRandomList(1000)
+    val maxHeap = MaxHeap.addAll(xs.asJava.asInstanceOf[java.util.List[java.lang.Integer]])
+    xs.sorted.zip(maxHeap.sorted().asScala) foreach { case (x, y) =>
+      x shouldEqual y
+    }
+  }
+
   private def generateRandomList(n: Int): List[Int] = {
     val buffer = new ArrayBuffer[Int]()
     for (_ <- 0 until n) {

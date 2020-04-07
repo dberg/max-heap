@@ -26,7 +26,7 @@ public class MaxHeap {
     if (xs.size() == 1) return h;
     int log2 = (int) Util.log2(xs.size());
     int i = ((1 << log2) - 1);
-    while (i > 0) h.heapify(--i);
+    while (i > 0) h.heapify(--i, h.a.size());
     return h;
   }
 
@@ -36,7 +36,7 @@ public class MaxHeap {
     if (a.size() == 1) return a.remove(0);
     swap(0, a.size() - 1);
     int pop = a.remove(a.size() - 1);
-    heapify(0);
+    heapify(0, a.size());
     return pop;
   }
 
@@ -48,26 +48,42 @@ public class MaxHeap {
     return r;
   }
 
-  private void heapify(int idx) {
-    if (idx >= a.size() - 1) return;
+  /**
+   * Returns the sorted values.
+   * This operation will clear the heap.
+   *
+   * O(n lg n) if addAll + sorted is performed.
+   **/
+  public List<Integer> sorted() {
+    for (int i = a.size(); i > 1; i--) {
+      swap(0, i - 1);
+      heapify(0, i - 1);
+    }
+    List<Integer> b = a;
+    a = new ArrayList<>();
+    return b;
+  }
+
+  private void heapify(int idx, int size) {
+    if (idx >= size - 1) return;
     int val = a.get(idx);
 
     // check left child if any
     int lidx = childLeft(idx);
-    if (lidx >= a.size()) return;
+    if (lidx >= size) return;
     int lval = a.get(lidx);
     int swapIdx = lval > val ? lidx : -1;
 
     // check right child if any.
     int ridx = childRight(idx);
-    if (ridx < a.size()) {
+    if (ridx < size) {
       int rval = a.get(ridx);
       if (rval > lval && rval > val) swapIdx = ridx;
     }
 
     if (swapIdx < 0) return;
     swap(idx, swapIdx);
-    heapify(swapIdx);
+    heapify(swapIdx, size);
   }
 
   private int childLeft(int idx) {
