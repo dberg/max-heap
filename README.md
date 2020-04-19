@@ -3,6 +3,8 @@
 This project contains a Maxheap java implementation and its visualization using
 javafx.
 
+More info [here](http://daniberg.com/2020/04/19/maxheap-and-javafx.html).
+
 ## Development
 
 Running the code will generate the file `/tmp/maxheap.png`.

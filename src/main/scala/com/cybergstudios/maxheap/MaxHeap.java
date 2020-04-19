@@ -52,7 +52,7 @@ public class MaxHeap {
    * Returns the sorted values.
    * This operation will clear the heap.
    *
-   * O(n lg n) if addAll + sorted is performed.
+   * O(n lg n) in sorted . addAll.
    **/
   public List<Integer> sorted() {
     for (int i = a.size(); i > 1; i--) {
